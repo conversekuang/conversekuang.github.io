@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="python,sql,pymysql,mysqldb">
 
 
 
@@ -79,22 +79,22 @@
 
 
 
-<meta name="description" content="MySQLdb与 PyMySQL之前一直用的python2.7版本，用到的是MySQLdb这个模块，然而又经常在资料中看到连接mysql数据中的是pymysql，于是就对这两个模块进行比较一下有什么区别。最后发现，其实也并没有多少差别。使用方法上几乎相同。 [TOC] MySQLdb与PyMySQL的相关介绍 MySQLdb只支持py2.x版本，而pymysql支持2.7以及3.x版本  MySQ">
-<meta name="keywords" content="Python 爬虫">
+<meta name="description" content="MySQLdb与 PyMySQL之前一直用的python2.7版本，用到的是MySQLdb这个模块，然而又经常在资料中看到连接mysql数据中的是pymysql，于是就对这两个模块进行比较一下有什么区别。最后发现，其实也并没有多少差别。使用方法上几乎相同。">
+<meta name="keywords" content="python,sql,pymysql,mysqldb">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysqldb与pymysql">
 <meta property="og:url" content="http://yoursite.com/2018/12/10/mysqldb与pymysql/index.html">
 <meta property="og:site_name" content="A Little Faith">
-<meta property="og:description" content="MySQLdb与 PyMySQL之前一直用的python2.7版本，用到的是MySQLdb这个模块，然而又经常在资料中看到连接mysql数据中的是pymysql，于是就对这两个模块进行比较一下有什么区别。最后发现，其实也并没有多少差别。使用方法上几乎相同。 [TOC] MySQLdb与PyMySQL的相关介绍 MySQLdb只支持py2.x版本，而pymysql支持2.7以及3.x版本  MySQ">
+<meta property="og:description" content="MySQLdb与 PyMySQL之前一直用的python2.7版本，用到的是MySQLdb这个模块，然而又经常在资料中看到连接mysql数据中的是pymysql，于是就对这两个模块进行比较一下有什么区别。最后发现，其实也并没有多少差别。使用方法上几乎相同。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="e:/blog/微信图片_20181210130830.png">
 <meta property="og:image" content="e:/blog/微信图片_20181210130908.png">
 <meta property="og:image" content="e:/blog/微信图片_20181210151437.png">
 <meta property="og:image" content="e:/blog/微信图片_20181210152205.png">
-<meta property="og:updated_time" content="2018-12-10T11:51:39.361Z">
+<meta property="og:updated_time" content="2018-12-10T13:43:51.644Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysqldb与pymysql">
-<meta name="twitter:description" content="MySQLdb与 PyMySQL之前一直用的python2.7版本，用到的是MySQLdb这个模块，然而又经常在资料中看到连接mysql数据中的是pymysql，于是就对这两个模块进行比较一下有什么区别。最后发现，其实也并没有多少差别。使用方法上几乎相同。 [TOC] MySQLdb与PyMySQL的相关介绍 MySQLdb只支持py2.x版本，而pymysql支持2.7以及3.x版本  MySQ">
+<meta name="twitter:description" content="MySQLdb与 PyMySQL之前一直用的python2.7版本，用到的是MySQLdb这个模块，然而又经常在资料中看到连接mysql数据中的是pymysql，于是就对这两个模块进行比较一下有什么区别。最后发现，其实也并没有多少差别。使用方法上几乎相同。">
 <meta name="twitter:image" content="e:/blog/微信图片_20181210130830.png">
 
 
@@ -291,9 +291,9 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/10/mysqldb与pymysql/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ConverseKuang">
+      <meta itemprop="name" content="conversekuang">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
@@ -339,6 +339,39 @@
           
 
           
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  分钟
+                </span>
+              
+            </div>
+          
 
           
 
@@ -356,7 +389,7 @@
 
       
         <h1 id="MySQLdb与-PyMySQL"><a href="#MySQLdb与-PyMySQL" class="headerlink" title="MySQLdb与 PyMySQL"></a>MySQLdb与 PyMySQL</h1><p>之前一直用的python2.7版本，用到的是MySQLdb这个模块，然而又经常在资料中看到连接mysql数据中的是pymysql，于是就对这两个模块进行比较一下有什么区别。最后发现，其实也并没有多少差别。使用方法上几乎相同。</p>
-<p>[TOC]</p>
+<a id="more"></a>
 <h2 id="MySQLdb与PyMySQL的相关介绍"><a href="#MySQLdb与PyMySQL的相关介绍" class="headerlink" title="MySQLdb与PyMySQL的相关介绍"></a>MySQLdb与PyMySQL的相关介绍</h2><blockquote>
 <p>MySQLdb只支持py2.x版本，而pymysql支持2.7以及3.x版本</p>
 </blockquote>
@@ -473,27 +506,19 @@
 
     <footer class="post-footer">
       
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/12/10/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+          
+            <a href="/tags/mysql/" rel="tag"><i class="fa fa-tag"></i> mysql</a>
+          
         </div>
+      
+
+      
+      
+      
+
       
 
       
@@ -556,7 +581,9 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">ConverseKuang</p>
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="conversekuang">
+            
+              <p class="site-author-name" itemprop="name">conversekuang</p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
@@ -567,7 +594,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">1</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -575,6 +602,15 @@
 
             
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
             
 
           </nav>
@@ -640,17 +676,38 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">ConverseKuang</span>
+  <span class="author" itemprop="copyrightHolder">conversekuang</span>
 
   
 </div>
 
+<span id="busuanzi_container_site_uv">
+  访客数:<span id="busuanzi_value_site_uv"></span>人次
+</span>
 
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <!--div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>-->
+
+
+
+  <!--span class="post-meta-divider">|</span>-->
+
+
+
+  <!--div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>-->
+
+
+
+
+
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>-->
+
 
 
 
@@ -658,11 +715,23 @@
 
 
 
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
 
 
 
+<span id="busuanzi_container_site_pv">
+   总访问量:<span id="busuanzi_value_site_pv"></span>次
+</span>
 
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共字</span>
+</div>
         
 
 
