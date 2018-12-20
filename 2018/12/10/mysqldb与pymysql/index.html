@@ -87,15 +87,15 @@
 <meta property="og:site_name" content="A Little Faith">
 <meta property="og:description" content="MySQLdb与 PyMySQL 之前一直用的python2.7版本，用到的是MySQLdb这个模块，然而又经常在资料中看到连接mysql数据中的是pymysql，于是就对这两个模块进行比较一下有什么区别。最后发现，其实也并没有多少差别。使用方法上几乎相同。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="e:%5Cblog%5C%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181210130830.png">
-<meta property="og:image" content="e:%5Cblog%5C%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181210130908.png">
-<meta property="og:image" content="e:%5Cblog%5C%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181210151437.png">
-<meta property="og:image" content="e:%5Cblog%5C%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181210152205.png">
-<meta property="og:updated_time" content="2018-12-11T15:41:30.431Z">
+<meta property="og:image" content="https://i.loli.net/2018/12/12/5c11006d9891d.png">
+<meta property="og:image" content="https://i.loli.net/2018/12/12/5c11006e33997.png">
+<meta property="og:image" content="https://i.loli.net/2018/12/12/5c11006eb1634.png">
+<meta property="og:image" content="https://i.loli.net/2018/12/12/5c11006ec083b.png">
+<meta property="og:updated_time" content="2018-12-20T14:47:57.755Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysqldb与pymysql">
 <meta name="twitter:description" content="MySQLdb与 PyMySQL 之前一直用的python2.7版本，用到的是MySQLdb这个模块，然而又经常在资料中看到连接mysql数据中的是pymysql，于是就对这两个模块进行比较一下有什么区别。最后发现，其实也并没有多少差别。使用方法上几乎相同。">
-<meta name="twitter:image" content="e:%5Cblog%5C%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181210130830.png">
+<meta name="twitter:image" content="https://i.loli.net/2018/12/12/5c11006d9891d.png">
 
 
 
@@ -338,6 +338,17 @@
 
                 
                 
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/mysql/模块/" itemprop="url" rel="index">
+                    <span itemprop="name">模块</span>
+                  </a>
+                </span>
+
+                
+                
               
             </span>
           
@@ -415,7 +426,7 @@
 <li>MySQLdb 是基于<code>_mysql</code> 的python简易包装器（官方文档中的用的是thin wapper，不知道这样翻译对不对），它能兼容 Python DB API interface (version 2)[<a href="https://pypi.org/project/MySQL-python/#pep-0249" target="_blank" rel="noopener">PEP-0249]</a>，所以大部分使用方式还是根据[<a href="https://pypi.org/project/MySQL-python/#pep-0249" target="_blank" rel="noopener">PEP-0249]</a>定义。只有MySQLdb模块中与接口定义不同的时候，参考MySQLdb模块文档[<a href="http://mysql-python.sourceforge.net/MySQLdb.html" target="_blank" rel="noopener">MySQLdb]</a>。其实MySQLdb只是定义了一些顶层的一些函数和属性，底层的很多东西在<code>_mysql</code>。</li>
 </ol>
 <blockquote>
-<p><code>_mysql</code></p>
+<p><code>_mysql</code> 模块</p>
 </blockquote>
 <p>如果要编写可跨数据库移植的应用，使用 <a href="http://mysql-python.sourceforge.net/MySQLdb.html#mysqldb" target="_blank" rel="noopener">MySQLdb</a>模块而避免直接使用<code>_mysql</code>模块。<code>_mysql</code> 是一个基本上实现MySQL C API的接口，更多内容参见 <a href="http://dev.mysql.com/doc/" target="_blank" rel="noopener">MySQL documentation</a>。因为我们使用MySQLdb模块基本上使用的是高级别的函数。</p>
 <p>所以第3点可以概括为，MySQLdb实现了 Python 数据库 API 规范 V2.0，基于 MySQL C API 上建立的。</p>
@@ -453,11 +464,11 @@
 <p>以上都是铺垫，下面才正式进入sql语句的执行部分。</p>
 <p>如果我们经常Ctrl C + V的话，基本很难发现这个小细节。因为这跟字符串匹配有点类似。如果不参照各种模板，基本上按照字符串匹配符和参数的写法写的。我自己写出来的sql语句就是这样的：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sql = <span class="string">"INSERT INTO client(name,age,phone)\</span></span><br><span class="line"><span class="string">       VALUES(%s,%d,%s)"</span> % (<span class="string">'converse'</span>, <span class="number">27</span> ,<span class="string">'12345654321'</span>)</span><br><span class="line">cursor.execute(sql)</span><br></pre></td></tr></table></figure>
-<p>。。很显然，这就心塞的报错了。（不就是一个插入语句么，怎么就会错~）</p>
+<p>。。很显然，这就心塞的报错了。（不就是一个插入语句么，怎么就会错？不知道是mysql版本还是其他问题？）</p>
 <p>使用mysqldb模块：</p>
-<p><img src="E:%5Cblog%5C%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181210130830.png" alt="微信图片_20181210130830"></p>
+<p><img src="https://i.loli.net/2018/12/12/5c11006d9891d.png" alt="mysqldb拼接URL.png"></p>
 <p>使用pymysql模块：</p>
-<p><img src="E:%5Cblog%5C%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181210130908.png" alt="微信图片_20181210130908"></p>
+<p><img src="https://i.loli.net/2018/12/12/5c11006e33997.png" alt="pymysql拼接URL.png"></p>
 <p>其实百度一下也很容易解决，在用 ’ '将字符串格式化操作符包裹起来就正确了。那么含有<em>字符串格式化</em>操作符的sql语句的格式该如何进行书写？下面进行总结。（不论使用哪个模块，均可采用以下两种方式执行含有字符串格式化操作符的sql语句，因此是通用的不区分模块进行书写）</p>
 <p>执行含有字符串格式化操作符的sql语句有以下两种方式：</p>
 <h3 id="sql语句的拼接方式"><a class="header-anchor" href="#sql语句的拼接方式">¶</a>sql语句的拼接方式</h3>
@@ -491,14 +502,14 @@
 <p>通过拼接后的sql语句可以表示为：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sql = "<span class="keyword">SELECT</span> <span class="keyword">name</span>,age,phone <span class="keyword">FROM</span> <span class="keyword">client</span> <span class="keyword">where</span> <span class="keyword">name</span> = <span class="string">''</span>or1= <span class="string">'1'</span><span class="string">"</span></span><br></pre></td></tr></table></figure>
 <p>由于1='1’总是为真，所以sql等价于<strong>select name,age,phone from client</strong>，因此该函数的执行结果如下，返回表中所有数据信息。</p>
-<p><img src="E:%5Cblog%5C%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181210151437.png" alt="微信图片_20181210151437"></p>
+<p><img src="https://i.loli.net/2018/12/12/5c11006eb1634.png" alt="SQL注入.png"></p>
 <hr>
 <ul>
 <li>传参方式</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">select_data_withParameters</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment">#方式2 传入参数方式</span></span><br><span class="line">    sql = <span class="string">"SELECT name,age,phone FROM client where name = %s"</span></span><br><span class="line">    res = cursor.execute(sql, <span class="string">"'or'1"</span>)</span><br><span class="line">    <span class="keyword">print</span> cursor.mogrify(sql, <span class="string">"'or'1"</span>)</span><br><span class="line">    <span class="comment">#内部执行参数化生成的SQL语句，对特殊字符进行了加\转义，避免注入语句生成。打印出来实际对MYSQL执行的sql语句</span></span><br><span class="line">    <span class="keyword">print</span> res</span><br><span class="line">    results = cursor.fetchall()</span><br><span class="line">    <span class="keyword">print</span> results</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> results:</span><br><span class="line">        <span class="keyword">print</span> i</span><br></pre></td></tr></table></figure>
 <p>我们先看执行结果，同样的输入，采用传参方法可以避免SQL注入。</p>
-<p><img src="E:%5Cblog%5C%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20181210152205.png" alt="微信图片_20181210152205"></p>
+<p><img src="https://i.loli.net/2018/12/12/5c11006ec083b.png" alt="防SQL注入.png"></p>
 <p>因为，通过参数生成SQL语句对特殊字符进行了加\转义，避免注入语句生成。其中cursor.mogrify()打印出来的是实际对数据库进行操作的SQL语句。</p>
 <p>这里介绍一下<a href="https://pymysql.readthedocs.io/en/latest/modules/cursors.html#pymysql.cursors.Cursor.mogrify" target="_blank" rel="noopener"><strong>mogrify(query, args=None)方法</strong></a> :</p>
 <ul>
@@ -506,10 +517,10 @@
 <li>该方法只存在于pymysql模块中。</li>
 </ul>
 <hr>
-<p>以上就是两个模块的总结，以及经常执行sql语句的两种方式总结。以后就知道什么时候带 ’ ‘ 什么时候不带 ’ ‘。再也不搞混了。</p>
+<p>以上就是两个模块的总结，以及经常执行sql语句的两种方式总结。以后就知道什么时候带 ’‘ 什么时候不带 ’‘。再也不搞混了。</p>
 <p>总结：</p>
 <ul>
-<li>pymysql更好，不存在版本问题，用法兼容MySQLdb</li>
+<li>pymysql更好，不存在Python版本问题，用法兼容MySQLdb</li>
 <li>含有<strong>字符串格式化操作符</strong>的sql语句，采用<strong>传参方式</strong>更安全</li>
 </ul>
 <hr>
@@ -517,6 +528,8 @@
 <p>MySQLdb官方文档   ------&gt;     <a href="http://mysql-python.sourceforge.net/MySQLdb.html" target="_blank" rel="noopener">http://mysql-python.sourceforge.net/MySQLdb.html</a></p>
 <p>PyMySQL官方文档    ------&gt;    <a href="https://pymysql.readthedocs.io/en/latest/index.html" target="_blank" rel="noopener">https://pymysql.readthedocs.io/en/latest/index.html</a></p>
 <p>[Python中操作mysql的pymysql模块详解]  ----&gt;     <a href="http://www.cnblogs.com/wt11/p/6141225.html" target="_blank" rel="noopener">http://www.cnblogs.com/wt11/p/6141225.html</a></p>
+<p><a href="https://www.jianshu.com/p/855fdb50c26c" target="_blank" rel="noopener">https://www.jianshu.com/p/855fdb50c26c</a></p>
+<p><a href="https://cuiqingcai.com/1972.html" target="_blank" rel="noopener">https://cuiqingcai.com/1972.html</a></p>
 
       
     </div>
@@ -545,6 +558,22 @@
       
       
 
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/20/urllib用法/" rel="prev" title="Python2的urllib、urllib2 与 Python3的urllib">
+                Python2的urllib、urllib2 与 Python3的urllib <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
       
 
       
@@ -620,7 +649,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -631,7 +660,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -642,7 +671,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -764,7 +793,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共1.8k字</span>
+  <span class="post-count">博客全站共4.5k字</span>
 </div>
         
 

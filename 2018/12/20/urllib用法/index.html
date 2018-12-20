@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python,sql,pymysql,mysqldb">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="经常看到Python中用urllib进行爬虫的操作，但是终究没有搞清楚有什么urllib，urllib2等模块的关系。最后Python3中的urllib又是和Python2中有什么区别？主要是自己梳理思路。">
+<meta name="keywords" content="python,sql,pymysql,mysqldb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python2的urllib、urllib2 与 Python3的urllib">
+<meta property="og:url" content="http://yoursite.com/2018/12/20/urllib用法/index.html">
+<meta property="og:site_name" content="A Little Faith">
+<meta property="og:description" content="经常看到Python中用urllib进行爬虫的操作，但是终究没有搞清楚有什么urllib，urllib2等模块的关系。最后Python3中的urllib又是和Python2中有什么区别？主要是自己梳理思路。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2018/12/12/5c10a058689d7.png">
+<meta property="og:image" content="https://i.loli.net/2018/12/12/5c10a291b65c1.png">
+<meta property="og:image" content="https://i.loli.net/2018/12/12/5c10a44c5c22c.png">
+<meta property="og:image" content="https://i.loli.net/2018/12/16/5c1628f1a3d93.png">
+<meta property="og:image" content="https://i.loli.net/2018/12/13/5c12458cc1eb0.png">
+<meta property="og:image" content="https://i.loli.net/2018/12/13/5c11d65e36ffc.png">
+<meta property="og:updated_time" content="2018-12-20T14:57:28.296Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python2的urllib、urllib2 与 Python3的urllib">
+<meta name="twitter:description" content="经常看到Python中用urllib进行爬虫的操作，但是终究没有搞清楚有什么urllib，urllib2等模块的关系。最后Python3中的urllib又是和Python2中有什么区别？主要是自己梳理思路。">
+<meta name="twitter:image" content="https://i.loli.net/2018/12/12/5c10a058689d7.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/20/urllib用法/">
+
+
+
+
+
+  <title>Python2的urllib、urllib2 与 Python3的urllib | A Little Faith</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">A Little Faith</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">慢慢来会比较快</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首&emsp;&emsp;页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            本人档案
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标&emsp;&emsp;签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分&emsp;&emsp;类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归&emsp;&emsp;档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/20/urllib用法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="conversekuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A Little Faith">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python2的urllib、urllib2 与 Python3的urllib</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-20T22:57:22+08:00">
+                2018-12-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/模块/" itemprop="url" rel="index">
+                    <span itemprop="name">模块</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.7k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  11 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>经常看到Python中用urllib进行爬虫的操作，但是终究没有搞清楚有什么urllib，urllib2等模块的关系。最后Python3中的urllib又是和Python2中有什么区别？主要是自己梳理思路。</p>
+<a id="more"></a>
+<h2 id="python2"><a class="header-anchor" href="#python2">¶</a>Python2</h2>
+<p>在python2中获取URL资源有两个模块：urllib 和 urllib2。它们之间是独立的两个模块。而requests 模块是更高级别的模块。</p>
+<h3 id="urllib"><a class="header-anchor" href="#urllib">¶</a>urllib</h3>
+<p>该模块中经常使用的方法</p>
+<ul>
+<li><code>urllib.urlopen</code>(<em>url</em>[, <em>data</em>[, <em>proxies</em>[, <em>context</em>]]])<a href="https://docs.python.org/2/library/urllib.html?highlight=urllib#urllib.urlopen" target="_blank" rel="noopener">¶</a>   该方法用于读取URL链接的内容。重点关注下它的返回值，是一个类文件的对象(file-like object)。返回对象支持以下操作 <code>read()</code>, <a href="https://docs.python.org/2/library/readline.html#module-readline" target="_blank" rel="noopener"><code>readline()</code></a>, <code>readlines()</code>, <code>fileno()</code>,<code>close()</code>, <code>info()</code>, <code>getcode()</code> and <code>geturl()</code>。（<em>用惯了requests模块的朋友们，千万不要以为这个方法返回的是response类，然后去用response.body等。这可以进一步看出，urllib提供的信息太有限了。。。</em>）</li>
+<li><code>urllib.urlencode</code>(<em>query</em>[, <em>doseq</em>])<a href="https://docs.python.org/2/library/urllib.html?highlight=urllib#urllib.urlencode" target="_blank" rel="noopener">¶</a>   将映射对象或者一系列二元元组转换成含有<strong>百分号的字符串形式</strong></li>
+</ul>
+<ol>
+<li>当我们需要获取一个简单的连接，可以定义一个这样的函数</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_without_data</span><span class="params">()</span>:</span></span><br><span class="line">	url = <span class="string">"http://www.baidu.com/s"</span></span><br><span class="line">	response = urllib.urlopen(newurl)</span><br><span class="line">	print(response.read())</span><br></pre></td></tr></table></figure>
+<ol>
+<li>当我们需要通过GET方法来提交参数时候，参数会跟在URL之后，因此可以进行如下操作</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_with_data</span><span class="params">()</span>:</span></span><br><span class="line">	url = <span class="string">"http://www.baidu.com/s"</span></span><br><span class="line">	word = &#123;<span class="string">"wd"</span>:<span class="string">"淘宝"</span>&#125;</span><br><span class="line">	word = urllib.urlencode(word) <span class="comment"># 将&#123;"wd":"淘宝"&#125;  转换成 wd=%E6%B7%98%E5%AE%9D</span></span><br><span class="line">	newurl = url + <span class="string">"?"</span> + word</span><br><span class="line">	response = urllib.urlopen(newurl)</span><br><span class="line">	print(response.read())</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2018/12/12/5c10a058689d7.png" alt="Get提交参数"></p>
+<p>抓包可以看到，通过以上方式可以实现GET请求方式提交参数。</p>
+<ol>
+<li>当我们需要通过POST方法来提交参数时候，可以如下操作</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">post_with_data</span><span class="params">()</span>:</span></span><br><span class="line">	url = <span class="string">'http://httpbin.org/post'</span></span><br><span class="line">	data = &#123;<span class="string">"author"</span>:<span class="string">"我们"</span>&#125;</span><br><span class="line">	send_data = urllib.urlencode(data)</span><br><span class="line">	<span class="keyword">print</span> send_data</span><br><span class="line">	res = urllib.urlopen(url =url, data = send_data)</span><br><span class="line">	<span class="keyword">print</span> type(res)</span><br><span class="line">	<span class="keyword">print</span> res.read()</span><br></pre></td></tr></table></figure>
+<p>​                            <img src="https://i.loli.net/2018/12/12/5c10a291b65c1.png" alt="a691143c2c3b69f9a1ccc6725318bfd.png"><img src="https://i.loli.net/2018/12/12/5c10a44c5c22c.png" alt="9ca7498e0191114ebdf62d428e0d3e3.png"></p>
+<p>抓包可以看到，POST方式参数并没有在请求URL中，而是在请求体中。</p>
+<p>所以以上三种情况可以总结如下：</p>
+<ul>
+<li><code>urlopen</code>函数没有HTTP method参数，一般情况下默认为<code>get</code>方法，</li>
+<li>而只有当我们在<code>urlopen</code>函数中加入<code>data</code>参数时候，请求方法会为<code>post</code>。<code>data</code>参数必须是标准<em>application/x-www-form-urlencoded</em> ，这个可以通过<code>urllib.urlencode</code>方法进行转换。</li>
+<li>但是如果我们想访问url并且用get方法提交数据<code>data</code>，我们只能在URL后拼接参数，再使用<code>urlopen</code>函数。</li>
+</ul>
+<p>提到了<strong>application/x-www-form-urlencoded</strong>编码方式，那么对HTTP的提交数据编码进行总结：</p>
+<blockquote>
+<p>POST提交数据，那么请求体中是编码后的数据，需要在请求头中声名数据的编码方式，主要有以下几种：</p>
+<p>“Content-Type”: “application/x-www-form-urlencoded” // 适用于大部分情况</p>
+<p>“Content-Type”: “application/json”      //适用于复杂JSON数据的提交</p>
+<p>“Content-Type”: “multipart/form-data”   // 适用于文件上传</p>
+</blockquote>
+<blockquote>
+<p>GET也可以提交数据，默认为 application/x-www-form-urlencoded 编码。但是提交数据会在请求头中的URL中显示出来，所以请求体都是空的，那么请求头也就不会出现Content-Type字段，这样理解不知道可不可以哈。（如上图1所示）</p>
+</blockquote>
+<p>从上面可以看出，urllib模块的功能是比较有限的，比如我们想在请求头中加入UA，cookie等信息就无法实现需求，需要求助其他模块了。</p>
+<p>参考博客：</p>
+<p><a href="https://www.cnblogs.com/miqi1992/p/7841599.html" target="_blank" rel="noopener">https://www.cnblogs.com/miqi1992/p/7841599.html</a></p>
+<p><a href="https://blog.csdn.net/xiao__jia__jia/article/details/79357274" target="_blank" rel="noopener">https://blog.csdn.net/xiao__jia__jia/article/details/79357274</a></p>
+<hr>
+<h3 id="urllib2"><a class="header-anchor" href="#urllib2">¶</a>urllib2</h3>
+<p>如果在HTTP请求中加入header, cookies时，<strong>urllib</strong>不能满足我们的需求，那么我们可以用<strong>urllib2</strong>模块实现。</p>
+<p><strong>urllib2</strong>模块中最常见的就是</p>
+<ul>
+<li><code>urllib2.urlopen</code>(<em>url[, data[, timeout[, cafile[, capath[, cadefault[, context]]]]]</em>)<a href="https://docs.python.org/2/library/urllib2.html?highlight=urllib2#urllib2.urlopen" target="_blank" rel="noopener">¶</a></li>
+</ul>
+<p>​        可以打开一个URL，参数： 字符串类型 或者<code>urllib2.Request</code>类型。</p>
+<p>​	返回：file-like object。该对象处理file-oject对象的方法还要额外的三种：geturl()，getinfo()，getcode()</p>
+<ul>
+<li>
+<p>class <code>urllib2.request.Request(url, data=None, headers={}, origin_req_host=None, unverifiable=False, method=None)</code></p>
+<p>通过加入参数到Request类来构建request ojbect，进而可以带入urllib2.urlopen( )中完成访问。</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">import</span> urllib2</span><br><span class="line"></span><br><span class="line">headers = &#123;<span class="string">"User-Agent"</span>:<span class="string">"Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)"</span>&#125;</span><br><span class="line">data = &#123;<span class="string">"wd"</span>:<span class="string">"淘宝"</span>&#125;</span><br><span class="line">data = urllib.urlencode(data)  <span class="comment">#需要借助urllib.urlencode()来实现编码</span></span><br><span class="line">req = urllib2.Request(url =<span class="string">'http://www.baidu.com'</span>, data = data, headers = headers)</span><br><span class="line">res = urllib2.urlopen(req)</span><br><span class="line"><span class="keyword">print</span> res.read()</span><br></pre></td></tr></table></figure>
+<p>以上，通过将headers带入到Request类中生成request object，进而通过urllib2.urlopen()完成URL请求。</p>
+<p>然而当我们需要在请求中加入proxy、认证、cookie信息等，urlopen()则无法满足该需求。</p>
+<hr>
+<h4 id="opener-and-handler"><a class="header-anchor" href="#opener-and-handler">¶</a>Opener and Handler</h4>
+<p>通过如下urllib2.urlopen()源码，它其实是一个特殊的opener(也就是模块帮我们创建好的opener)。在urlopen()函数中，首先通过<strong>build_opener()<strong>返回urllib2.OpenerDirector对象</strong>opener</strong>，再将该实例赋给<strong>global _opener</strong>，(该_opener在urlopen()函数外赋值为None)，最后通过**opener.open()**来实现。如果需要处理更特殊的问题，则需要自定义的opener通过open()函数来执行，该方式和执行urlopen()函数有相同的效果。</p>
+<p><img src="https://i.loli.net/2018/12/16/5c1628f1a3d93.png" alt="90a7e22646447ef8b771878c28aa3fe.png"></p>
+<p>但是基本的urlopen()不能支持更多的问题处理能力，例如 cookie，proxy等，因此我们要借助Handler和Openner。(可以这么理解，因为模块帮我们定制的是大部分简单问题，遇到特殊问题我们需要具体问题具体分析，因此要使用能处理特定问题的Handler，进而需要生成自定义的opener。)</p>
+<hr>
+<p><strong>Handler</strong>：处理特定问题的处理器。</p>
+<p><strong>Opener</strong>：带入Handler通过build_opener()生成OpenerDirector类的一个实例，用于来解决特定问题。</p>
+<p>解决特定问题而常见的类与函数：</p>
+<ul>
+<li><em>class</em> <code>urllib2.BaseHandler</code>   所有handler的基类</li>
+</ul>
+<p>常见的handler有：</p>
+<p><code>HTTPCookieProcessor</code>([<em>cookiejar</em>])<a href="https://docs.python.org/2/library/urllib2.html?highlight=urllib2#urllib2.HTTPCookieProcessor" target="_blank" rel="noopener">¶</a></p>
+<p><code>ProxyHandler</code>([<em>proxies</em>])<a href="https://docs.python.org/2/library/urllib2.html?highlight=urllib2#urllib2.ProxyHandler" target="_blank" rel="noopener">¶</a></p>
+<p><code>HTTPHandler</code></p>
+<p>……</p>
+<hr>
+<p>生成Handler后，要生成一个自定义的Opener。需要使用以下方法：</p>
+<ul>
+<li>
+<p><code>urllib2.build_opener</code>([<em>handler</em>, <em>…</em>])</p>
+<ul>
+<li>参数：可以是一系列baseHandler或者其子类Handlers，按照给定顺序进行处理。</li>
+<li>返回：一个 <a href="https://docs.python.org/2/library/urllib2.html?highlight=urllib2#urllib2.OpenerDirector" target="_blank" rel="noopener"><code>OpenerDirector</code></a> 实例。</li>
+</ul>
+<p>因此可以通过添加各种处理问题的handlers，（比如，既要解决代理问题又要解决cookie问题，则将两个handlers一起传入），最后通过build_opener()就可以得到解决该问题的一个 <a href="https://docs.python.org/2/library/urllib2.html?highlight=urllib2#urllib2.OpenerDirector" target="_blank" rel="noopener"><code>OpenerDirector</code></a> 实例。</p>
+</li>
+</ul>
+<p><a href="https://docs.python.org/2/library/urllib2.html?highlight=urllib2#urllib2.OpenerDirector" target="_blank" rel="noopener"><code>OpenerDirector</code></a> 对象最常用的方法：</p>
+<ul>
+<li><code>OpenerDirector.open</code>(<em>url[, data],[timeout]</em>)   通过传入request object或者URL参数可以进行访问。使用方法类似于urlopen()。如果我们一定要通过urlopen()来使用自定义的opener，那么需要执行urllib2.install_opener()方法。</li>
+<li><code>urllib2.install_opener</code>(<em>opener</em>)<a href="https://docs.python.org/2/library/urllib2.html?highlight=urllib2#urllib2.install_opener" target="_blank" rel="noopener">¶</a>  将OpenerDirector作为全局Opener。 只有想通过urlopen()函数来操作这个Opener时， 才会执行Install_opener()方法。否则，我们完全可以用OpenerDirector.open()来代替urlopen()。</li>
+</ul>
+<p>下面通过代码来看一下Handler和opener的使用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> urllib2</span><br><span class="line"><span class="keyword">import</span> cookielib </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_cookie</span><span class="params">()</span>:</span></span><br><span class="line">	headers = &#123;<span class="string">'User-Agent'</span>:<span class="string">'Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11'</span>&#125;</span><br><span class="line">	url = <span class="string">'http://www.baidu.com'</span></span><br><span class="line">	cj = cookielib.CookieJar()</span><br><span class="line">	handler =  urllib2.HTTPCookieProcessor(cj)</span><br><span class="line">	opener = urllib2.build_opener(handler) </span><br><span class="line">	r = urllib2.Request(url = url, headers = headers)</span><br><span class="line">	res = opener.open(r)</span><br><span class="line">	<span class="keyword">print</span> res.geturl()</span><br><span class="line">	<span class="keyword">print</span> <span class="string">'status'</span>, res.getcode()</span><br><span class="line">	<span class="keyword">print</span> <span class="string">"headers:"</span></span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> res.info():</span><br><span class="line">		<span class="keyword">print</span> i</span><br><span class="line">	<span class="keyword">print</span> <span class="string">"cookie:"</span></span><br><span class="line">	<span class="keyword">for</span> item <span class="keyword">in</span> cj:</span><br><span class="line">		<span class="keyword">print</span> <span class="string">'name = '</span>+ item.name</span><br><span class="line">		<span class="keyword">print</span> <span class="string">'value = '</span>+ item.value</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">	get_cookie()</span><br></pre></td></tr></table></figure>
+<p>执行的代码结果如下:</p>
+<p><img src="https://i.loli.net/2018/12/13/5c12458cc1eb0.png" alt="501f8930b052343e011fae49d3fe49b.png"></p>
+<p>通过上面解决cookie的问题，可以总结如下套路：</p>
+<ol>
+<li>生成处理某一问题的handler                        handler = XXXHandler( )</li>
+<li>生成对应的OpenerDirector实例                  opener = urllib2.build_opener( handler )</li>
+<li>生成  request object   请求对象                   req = urllib2.Request( )</li>
+<li>将request object 带入到 opener打开         response = opener.open(req)</li>
+</ol>
+<p>参考博客：</p>
+<p><a href="https://www.cnblogs.com/miqi1992/p/7872785.html" target="_blank" rel="noopener">https://www.cnblogs.com/miqi1992/p/7872785.html</a></p>
+<hr>
+<h3 id="urlparse"><a class="header-anchor" href="#urlparse">¶</a>urlparse</h3>
+<p><a href="https://docs.python.org/2.7/library/urlparse.html?highlight=parse#module-urlparse" target="_blank" rel="noopener">urlparse.py</a>主要的作用:</p>
+<ol>
+<li>将URL链接拆分为各部分</li>
+<li>将各部分重新结合为URL链接</li>
+<li>在原有URL链接基础上将相对URL转换成绝对URL链接</li>
+</ol>
+<p>常用方法如下：</p>
+<ul>
+<li><code>urlparse.urlparse</code>(<em>urlstring</em>[, <em>scheme</em>[, <em>allow_fragments</em>]])<a href="https://docs.python.org/2.7/library/urlparse.html?highlight=parse#urlparse.urlparse" target="_blank" rel="noopener">¶</a></li>
+</ul>
+<p>将URL解析为6部分<strong>scheme://netloc/path;parameters?query#fragment</strong>，可以通过index来获取各部分值。</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Index</th>
+<th>Value</th>
+<th>Value if not present</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scheme</code></td>
+<td>0</td>
+<td>URL scheme specifier</td>
+<td><em>scheme</em> parameter</td>
+</tr>
+<tr>
+<td><code>netloc</code></td>
+<td>1</td>
+<td>Network location part</td>
+<td>empty string</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td>2</td>
+<td>Hierarchical path</td>
+<td>empty string</td>
+</tr>
+<tr>
+<td><code>params</code></td>
+<td>3</td>
+<td>Parameters for last path element</td>
+<td>empty string</td>
+</tr>
+<tr>
+<td><code>query</code></td>
+<td>4</td>
+<td>Query component</td>
+<td>empty string</td>
+</tr>
+<tr>
+<td><code>fragment</code></td>
+<td>5</td>
+<td>Fragment identifier</td>
+<td>empty string</td>
+</tr>
+<tr>
+<td><code>username</code></td>
+<td></td>
+<td>User name</td>
+<td><a href="https://docs.python.org/2.7/library/constants.html#None" target="_blank" rel="noopener"><code>None</code></a></td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td></td>
+<td>Password</td>
+<td><a href="https://docs.python.org/2.7/library/constants.html#None" target="_blank" rel="noopener"><code>None</code></a></td>
+</tr>
+<tr>
+<td><code>hostname</code></td>
+<td></td>
+<td>Host name (lower case)</td>
+<td><a href="https://docs.python.org/2.7/library/constants.html#None" target="_blank" rel="noopener"><code>None</code></a></td>
+</tr>
+<tr>
+<td><code>port</code></td>
+<td></td>
+<td>Port number as integer, if present</td>
+<td><a href="https://docs.python.org/2.7/library/constants.html#None" target="_blank" rel="noopener"><code>None</code></a></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>urlparse.urlsplit</code>(<em>urlstring</em>[, <em>scheme</em>[, <em>allow_fragments</em>]])<a href="https://docs.python.org/2.7/library/urlparse.html?highlight=parse#urlparse.urlsplit" target="_blank" rel="noopener">¶</a></li>
+</ul>
+<p>将URL按模式进行拆分，与<code>urlparse()</code>相比较，只是没有把参数params从URL中分割出来。如图所示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_url</span><span class="params">()</span>:</span></span><br><span class="line">	url = <span class="string">'http://user:pass@Netloc:80/path;parameters?query=argument#fragment'</span></span><br><span class="line">	res1 = urlparse.urlparse(url)</span><br><span class="line">	res2 = urlparse.urlsplit(url)</span><br><span class="line">	<span class="keyword">print</span> url</span><br><span class="line">	<span class="keyword">print</span> res1</span><br><span class="line">	<span class="keyword">print</span> res2</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2018/12/13/5c11d65e36ffc.png" alt="64e48639c123693a5dba5c024aa6052.png"></p>
+<ul>
+<li><a href="https://docs.python.org/2.7/library/urlparse.html?highlight=parse#module-urlparse" target="_blank" rel="noopener"><code>urlparse()</code></a> 与 <a href="https://docs.python.org/2.7/library/urlparse.html?highlight=parse#urlparse.urlsplit" target="_blank" rel="noopener"><code>urlsplit()</code></a> 返回结果的处理</li>
+</ul>
+<p><a href="https://docs.python.org/2.7/library/urlparse.html?highlight=parse#module-urlparse" target="_blank" rel="noopener"><code>urlparse()</code></a> 与 <a href="https://docs.python.org/2.7/library/urlparse.html?highlight=parse#urlparse.urlsplit" target="_blank" rel="noopener"><code>urlsplit()</code></a> 方法返回的结果都是 <a href="https://docs.python.org/2.7/library/functions.html#tuple" target="_blank" rel="noopener"><code>tuple</code></a> 类型。该返回值可以通过<code>geturl()</code>方法得到重新组合后的URL，该URL与原URL稍有不同，<strong>sheme属性统一为小写，此外，空参数，请求，和锚点都将被移除</strong>。</p>
+<ul>
+<li>
+<p><code>urlparse.urljoin</code>(<em>base</em>, <em>url</em>[, <em>allow_fragments</em>])<a href="https://docs.python.org/2.7/library/urlparse.html?highlight=parse#urlparse.urljoin" target="_blank" rel="noopener">¶</a></p>
+<p>通过base链接将相对链接（url参数）转换成绝对链接（返回值）。相对链接一般是从base链接中获取的协议模式、网络地址、以及（部分）路径信息，最后获得绝对URL链接。</p>
+<p>函数urljoin在通过为URL基地址附加新的文件名的方式来处理同一位置处的若干文件的时候格外有用。需要注意的是，如果基地址并非以字符/结尾的话，那么URL基地址最右边部分就会被这个相对路径所替换。<strong>如果希望在该路径中保留末端目录，应确保URL基地址以字符/结尾。</strong></p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> urlparse</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>urlparse.urljoin(<span class="string">'http://www.oschina.com/tieba'</span>,<span class="string">'index.php'</span>)</span><br><span class="line"><span class="string">'http://www.oschina.com/index.php'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>urlparse.urljoin(<span class="string">'http://www.oschina.com/tieba/'</span>,<span class="string">'index.php'</span>)</span><br><span class="line"><span class="string">'http://www.oschina.com/tieba/index.php'</span></span><br></pre></td></tr></table></figure>
+<p>参考链接：</p>
+<p><a href="https://www.cnblogs.com/cemaster/p/6435711.html" target="_blank" rel="noopener">https://www.cnblogs.com/cemaster/p/6435711.html</a></p>
+<hr>
+<p>以上urllib，urllib2以及urlparse，这三个独立的模块经常在Python2中配合使用。urlparse注重的是URL链接拆分与组合；urllib可以实现简单的资源访问；urllib2更加丰富以及复杂的请求。urllib2与urllib不是替代或者升级关系，通常在Python2中他们经常需要配合使用完成URL资源的请求。</p>
+<h2 id="python3"><a class="header-anchor" href="#python3">¶</a>Python3</h2>
+<p>在Python2中，资源请求的模块比较分散，因此在Python3中进行整合。Python3中，urllib包中只有4个模块。</p>
+<p>urllib主要分为以下四个模块</p>
+<ul>
+<li>第一个模块 request，它是最基本的 HTTP 请求模块，我们可以用它来模拟发送一请求，就像在浏览器里输入网址然后敲击回车一样，只需要给库方法传入 URL 还有额外的参数，就可以模拟实现这个过程了。</li>
+<li>第二个 error 模块即异常处理模块，如果出现请求错误，我们可以捕获这些异常，然后进行重试或其他操作保证程序不会意外终止。</li>
+<li>第三个 parse 模块是一个工具模块，提供了许多 URL 处理方法，比如拆分、解析、合并等等的方法。</li>
+<li>第四个模块是 robotparser，主要是用来识别网站的 robots.txt 文件，然后判断哪些网站可以爬，哪些网站不可以爬的，其实用的比较少。</li>
+</ul>
+<p>Python3在用法上和Python2中的函数用法基本相同。具体介绍参考崔庆才–Python3网络爬虫发开实战的这部分<a href="https://germey.gitbooks.io/python3webspider/content/3.1-%E4%BD%BF%E7%94%A8Urllib.html" target="_blank" rel="noopener">Python3的Urllib</a>，不再赘述。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+          
+            <a href="/tags/urllib/" rel="tag"><i class="fa fa-tag"></i> urllib</a>
+          
+            <a href="/tags/urllib2/" rel="tag"><i class="fa fa-tag"></i> urllib2</a>
+          
+            <a href="/tags/urlparse/" rel="tag"><i class="fa fa-tag"></i> urlparse</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/10/mysqldb与pymysql/" rel="next" title="mysqldb与pymysql">
+                <i class="fa fa-chevron-left"></i> mysqldb与pymysql
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="conversekuang">
+            
+              <p class="site-author-name" itemprop="name">conversekuang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/conversekuang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:conversekuang@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#python2"><span class="nav-number">1.</span> <span class="nav-text">¶Python2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#urllib"><span class="nav-number">1.1.</span> <span class="nav-text">¶urllib</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#urllib2"><span class="nav-number">1.2.</span> <span class="nav-text">¶urllib2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#opener-and-handler"><span class="nav-number">1.2.1.</span> <span class="nav-text">¶Opener and Handler</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#urlparse"><span class="nav-number">1.3.</span> <span class="nav-text">¶urlparse</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python3"><span class="nav-number">2.</span> <span class="nav-text">¶Python3</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">conversekuang</span>
+
+  
+</div>
+
+<span id="busuanzi_container_site_uv">
+  访客数:<span id="busuanzi_value_site_uv"></span>人次
+</span>
+
+
+  <!--div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>-->
+
+
+
+  <!--span class="post-meta-divider">|</span>-->
+
+
+
+  <!--div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>-->
+
+
+
+
+
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>-->
+
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+
+
+
+<span id="busuanzi_container_site_pv">
+   总访问量:<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共4.5k字</span>
+</div>
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
