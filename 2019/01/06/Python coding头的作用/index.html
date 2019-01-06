@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="coding头,BOM,str,unicode">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Python2中乱码是让人非常头疼的问题，怎么样杜绝出现乱码错误？这个牵扯很多方面的知识，Unicode方面，编码方式等。后面的会陆续更新。本篇文章主要讲的是Python coding头的作用。">
+<meta name="keywords" content="coding头,BOM,str,unicode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python coding头的作用">
+<meta property="og:url" content="http://yoursite.com/2019/01/06/Python coding头的作用/index.html">
+<meta property="og:site_name" content="A Little Faith">
+<meta property="og:description" content="Python2中乱码是让人非常头疼的问题，怎么样杜绝出现乱码错误？这个牵扯很多方面的知识，Unicode方面，编码方式等。后面的会陆续更新。本篇文章主要讲的是Python coding头的作用。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://i.loli.net/2019/01/06/5c320c361d65d.png">
+<meta property="og:image" content="https://i.loli.net/2019/01/06/5c320f9c12c16.png">
+<meta property="og:image" content="https://i.loli.net/2019/01/06/5c321503ddd59.png">
+<meta property="og:image" content="https://i.loli.net/2019/01/06/5c321a049d8d0.png">
+<meta property="og:updated_time" content="2019-01-06T16:08:30.236Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python coding头的作用">
+<meta name="twitter:description" content="Python2中乱码是让人非常头疼的问题，怎么样杜绝出现乱码错误？这个牵扯很多方面的知识，Unicode方面，编码方式等。后面的会陆续更新。本篇文章主要讲的是Python coding头的作用。">
+<meta name="twitter:image" content="https://i.loli.net/2019/01/06/5c320c361d65d.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/01/06/Python coding头的作用/">
+
+
+
+
+
+  <title>Python coding头的作用 | A Little Faith</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">A Little Faith</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">慢慢来会比较快</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首&emsp;&emsp;页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            本人档案
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标&emsp;&emsp;签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分&emsp;&emsp;类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归&emsp;&emsp;档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/06/Python coding头的作用/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="conversekuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="A Little Faith">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python coding头的作用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-06T23:56:23+08:00">
+                2019-01-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  3.4k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  13 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Python2中乱码是让人非常头疼的问题，怎么样杜绝出现乱码错误？这个牵扯很多方面的知识，Unicode方面，编码方式等。后面的会陆续更新。本篇文章主要讲的是Python coding头的作用。</p>
+<a id="more"></a>
+<h2 id="基础知识"><a class="header-anchor" href="#基础知识">¶</a>基础知识</h2>
+<blockquote>
+<p>Python2 中字符串有两类：unicode 和 str 类型</p>
+</blockquote>
+<ul>
+<li><strong>命令行中</strong></li>
+</ul>
+<p>在命令行中我们进行测试：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s1 = <span class="string">"中国"</span>     <span class="comment">#str类型</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(s1)</span><br><span class="line">&lt;type <span class="string">'str'</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s2 = <span class="string">u"中国"</span>   <span class="comment">#unicode类型，字符串前加u</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(s2)</span><br><span class="line">&lt;type <span class="string">'unicode'</span>&gt;</span><br></pre></td></tr></table></figure>
+<p><strong>unicode类型</strong>是字符串在python内存中的存储方式，也是各种编码转换的中转站。特点是高效，可以便于根据Unicode值来查找对应的字符。</p>
+<p><strong>str类型</strong>是字符串在python中的输出方式，比如存储，传输。特点是存储空间小。</p>
+<p>再看一下这两中字符串在内存中的<strong>存储方式</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s1</span><br><span class="line"><span class="string">'\xd6\xd0\xb9\xfa'</span>   <span class="comment">#“中国”在gbk编码方式下的十六进制代码，windows命令行默认是gbk编码</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s2</span><br><span class="line"><span class="string">u'\u4e2d\u56fd'</span></span><br></pre></td></tr></table></figure>
+<p>可以看出，s1是经过编码后的16进制数，而s2是unicode字符所在位置信息。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> s1</span><br><span class="line">中国</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> s2</span><br><span class="line">中国</span><br></pre></td></tr></table></figure>
+<p>当我们打印这两中不同类型的字符串时候，都能够显示出一样的字符串信息。</p>
+<p>unicode类型与str类型之间的转换</p>
+<p>unicode类型通过encode()可以转换为str类型</p>
+<p>str类型通过decode()可以转换为unicode类型</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s2 == s1.decode(<span class="string">'gbk'</span>)</span><br><span class="line"><span class="keyword">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s1 == s2.encode(<span class="string">'gbk'</span>)</span><br><span class="line"><span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<p>为什么说unicode是str类型各个编码方式的中间状态？</p>
+<p>因为unicode字符串内容代表unicode的位置信息，该位置信息在unicode字符集中是不变的。那么当然是“以不变应万变”，通过unicode字符串将字符转换成不同编码。比如，我们有一个str类型的字符串对象 A，它是utf8编码的。如何将它转换成gbk编码的字符串对象 C呢？</p>
+<p>首先通过B = A.decode(‘utf8’)操作把A变为unicode字符串，再通过C = B.encode(‘gbk’)操作把B变为gbk编码的str字符串。也就是：<code>C = A.decode('utf8').encode('gbk')</code>。我们将<code>utf-8</code>编码的字符串A转换成<code>gbk</code>编码的字符串C。可以看到，B对象就是unicode字符串类型，在编码转换中起到了桥梁的作用。</p>
+<ul>
+<li><strong>脚本文件中</strong></li>
+</ul>
+<p>我们之前的操作都是在命令行中进行的，貌似并没有用到python coding头。在sublime中新建script.py脚本并输入以下代码。然后：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">s1 = <span class="string">"中国"</span></span><br><span class="line">s2 = <span class="string">u"中国"</span></span><br><span class="line"><span class="keyword">print</span> s1</span><br><span class="line"><span class="keyword">print</span> s2</span><br><span class="line"></span><br><span class="line">File <span class="string">"F:\Python_project\script.py"</span>, line <span class="number">1</span> </span><br><span class="line">SyntaxError: Non-ASCII character <span class="string">'\xe4'</span> <span class="keyword">in</span> file F:\Python_project\sql.py on line <span class="number">1</span>, but no encoding declared; see http://python.org/dev/peps/pep<span class="number">-0263</span>/ <span class="keyword">for</span> details</span><br><span class="line">[Finished <span class="keyword">in</span> <span class="number">0.1</span>s <span class="keyword">with</span> exit code <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+<p>发现报语义错误，可以查看  <a href="https://www.python.org/dev/peps/pep-0263/" target="_blank" rel="noopener">PEP 263 </a> 文件的编码说明。由于因为python的解释器默认采用ASCII编码来解释文本。我好奇，既然不能解码，那文本是怎么写入到脚本中的呢？</p>
+<p><strong>所以我想强调的是</strong>：</p>
+<p>我们经常使用的集成开发软件，编辑器基本上都设置了默认的编码的编码方式。所以在我们在写完代码保存时，这些工具按照默认的编码方式来保存文件。 比如sublime默认的编码方式为UTF-8，当我们在windows的记事本中写完保存时，默认的是ANSI编码方式（也就是gbk编码）。可以试一下，当我们在文本中输入中文但是选择字符集不包含汉字的编码方式，会出现什么情况？</p>
+<img src="https://i.loli.net/2019/01/06/5c320c361d65d.png" style="zoom:70%">
+<p>可以看出，当选择字符集中不包含汉字的编码方式，无法保存文件。因为对于字符集中不存在的字符，无法进行编码来转换成二进制文件保存，因此会出现错误。这里，我们要说的就是文件保存时已经带有默认的编码方式，而当采用与文件编码方式不同的解码方式读取时，就会产生冲突，要么乱码或者就直接报错无法找到。</p>
+<p>script.py脚本采用sublime中的utf-8默认编码方式，而python的解释器默认采用ASCII编码进行解释（根据  <a href="https://www.python.org/dev/peps/pep-0263/" target="_blank" rel="noopener">PEP 263 </a> 文档），显然解码方式与文件编码方式冲突，就会产生错误。主要是因为ASCII并不包括汉字，因此无法解释汉字对应的十六进制数。</p>
+<p><strong><em>如何让Python解释器能够正确读取文本文件？那么就要设置Coding头，解释器就按照coding头的方式来解释代码，所以保存脚本的编码方式要与python解释器的读取编码一致。</em></strong></p>
+<p>由于script.py采用的是UTF-8编码，我们在脚本开始加入<code>#coding:utf-8</code>，则脚本文件代码为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line">s1 = <span class="string">"中国"</span></span><br><span class="line">s2 = <span class="string">u"中国"</span></span><br><span class="line"><span class="keyword">print</span> s1</span><br><span class="line"><span class="keyword">print</span> s2</span><br></pre></td></tr></table></figure>
+<p>发现可以脚本正常运行。所以很多文档都写到，当脚本中出现中文字符串或者注释的中文都要用设置文件头来读取。为了避免乱码，经常采用utf-8编码方式来保存代码，所以百度出来各种方案的也让大家将coding头设置为utf-8。</p>
+<blockquote>
+<p><strong>总结</strong>：</p>
+<p><strong>其实最重要的是，保存文件的编码方式要与coding头一致，这样python解释器才能正确的读取代码，否则会出现乱码或错误。</strong></p>
+</blockquote>
+<p>是不是铺垫有点长了，终于引出coding头了</p>
+<h2 id="coding-头"><a class="header-anchor" href="#coding-头">¶</a>coding 头</h2>
+<p>写python许久，平时自己一直在文件开头写</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br></pre></td></tr></table></figure>
+<p>还见到这样的写法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding:utf-8 -*-</span></span><br></pre></td></tr></table></figure>
+<p>就是认为第一行是执行该脚本的解释器所在位置，第二行是脚本的编码方式。</p>
+<p>但是很好奇一些问题：</p>
+<p>(1) 为什么要在第一行要给出解释器所在位置呢？平时在命令行执行不都是 python <a href="http://xxx.py" target="_blank" rel="noopener">xxx.py</a>，为什么还要在脚本中再写一遍？</p>
+<p>(2) 上面已经讲述过<code>coding:utf-8</code>coding头能够让python正确解释脚本。然而，碰到与编码有关的问题时，百度出来一定也有这样的<code>sys.setdefaultencoding()</code>解决方式，那么这两个方式有分别有什么作用？</p>
+<p>下面来依次来看一下上面的两个问题。</p>
+<p><strong>其中，官方文档  <a href="https://www.python.org/dev/peps/pep-0263/" target="_blank" rel="noopener">PEP 263 </a>  定义Python源代码的编码规范</strong></p>
+<h3 id="脚本的执行"><a class="header-anchor" href="#脚本的执行">¶</a>脚本的执行</h3>
+<p>#!/usr/bin/python 或 #!/usr/bin/env python</p>
+<ul>
+<li>
+<p>注释在<strong>windows中没有作用</strong>。</p>
+<p>我们在命令行运行脚本仍然采用 python <a href="http://xxx.py" target="_blank" rel="noopener">xxx.py</a>。系统能够识别python的解释器是因为在安装时候设置了环境变量path值，该值为python解释器路径。</p>
+</li>
+<li>
+<p>注释在<strong>Linux或者Unix下有效</strong></p>
+<p>在Linux或者Unix下，相当于<strong>告诉脚本到指定用什么解释器运行脚本以及解释器所在的位置</strong>。有以下两种方式：</p>
+<p><code>#!/usr/bin/python</code></p>
+<p>是告诉操作系统执行这个脚本的时候，调用 /usr/bin下的python解释器；</p>
+<p><code>#!/usr/bin/env python</code></p>
+<p>这种用法是为了操作系统防止用户没有将python 装在默认的 /usr/bin 路径里当系统看到这一行的时候，首先会到env设置里查找python的安装路径，再调用对应路径下的解释器程序完成操作。</p>
+</li>
+</ul>
+<p>当在脚本中插入执行路径，可以直接运行脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">    print(<span class="string">"Iteration:"</span>,i)</span><br></pre></td></tr></table></figure>
+<p>保存后，执行以 下命令：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod +x temp.py <span class="comment">#增加执行权限</span></span><br><span class="line">./temp.py <span class="comment">#运行脚本</span></span><br></pre></td></tr></table></figure>
+<p>可以看出，在脚本中写入编译器位置后，可以直接运行脚本。</p>
+<p>所以问题(1)就解决了，在Linux或者Unix中，当脚本有执行权限，可以通过脚本中编译器的位置来直接运行脚本。</p>
+<h3 id="脚本的编码"><a class="header-anchor" href="#脚本的编码">¶</a>脚本的编码</h3>
+<p>Python解释器将根据脚本中设定的编码信息来翻译文件，Python解释器将ASCII作为默认的编码方式。</p>
+<p>如果我们需要使用编码头，那么必须将这个coding头写在文件的第一行或者第二行。由于第一行指出解释器位置，那么第二行则是说明编码方式。所以常见到这样的写法:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br></pre></td></tr></table></figure>
+<p>根据上面提到的，python解释就会使用utf-8编码方式来解读文件。</p>
+<blockquote>
+<p>此外，根据官方文档  <a href="https://www.python.org/dev/peps/pep-0263/" target="_blank" rel="noopener">PEP 263 </a>  提到了兼容windows中的特别情况。下面进行说明。</p>
+</blockquote>
+<p>在windows记事本中，编码方式有4种：</p>
+<img src="https://i.loli.net/2019/01/06/5c320f9c12c16.png" style="zoom:50%">
+<ul>
+<li>
+<p>ANSI：在简体中文Windows操作系统中，ANSI 编码代表 GBK 编码。在新建文件中默认编码是ANSI。</p>
+</li>
+<li>
+<p>unicode：采用小端模式utf-16进行编码。在文件开头加上**\xff\xfe**</p>
+</li>
+<li>
+<p>unicode big endian：采用大端模式utf-16进行编码。在文件开头加上**\xfe\xff**</p>
+</li>
+<li>
+<p>UTF-8：这个UTF-8是带BOM的，也就是我们在选择这个编码方式时候，在标准UTF-8编码的基础上，文件还会在开头处加上一个串16进制数：<strong>\xef\xbb\xbf</strong></p>
+</li>
+</ul>
+<p>下面我们依次创建以上编码的文件，而文件内容保持一致都是<strong>英文字母a</strong>，它对应的ASCII码是61。</p>
+<img src="https://i.loli.net/2019/01/06/5c321503ddd59.png" style="zoom:80%">
+<p>通过以上例子，windows的记事本除了对文件内容编码外还会加上编码头。</p>
+<p>值得注意的是，windows记事本中的UTF-8不是标准的UTF-8。因为它会在文件开头加上**’\xef\xbb\xbf’**，通常称为BOM。</p>
+<p><strong>为了照顾特殊的Windows中的带BOM(’\xef\xbb\xbf’)的UTF-8:</strong></p>
+<ol>
+<li>如果python文件是带BOM的UTF-8编码文件，即使文件开头没有编码方式的说明，也可以自动默认是UTF-8编码。</li>
+<li>如果python文件是带BOM的UTF-8编码文件，但是文件头中的编码不是UTF-8，这会造成，声明的编码和实际编码不一致，所以自然会报错。</li>
+</ol>
+<p>下面，我们测试python解释器对待windows中带BOM的UTF-8文件：</p>
+<p>测试脚本的内容如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">"中国"</span></span><br></pre></td></tr></table></figure>
+<p>demo_with_BOM.py        : 在记事本中编辑代码并保存为UTF-8编码。该情况下，存在BOM。</p>
+<p>demo_without_BOM.py  : 在sublime中编辑代码并保存为UTF-8编码。该情况下，不存在BOM。</p>
+<p>这两个文件的16进制表达式表示如下：</p>
+<img src="https://i.loli.net/2019/01/06/5c321a049d8d0.png" style="zoom:80%">
+<p>可以看出，差别在于BOM，但是以上的这两个脚本都可以正常运行。</p>
+<p>在demo_with_BOM.py 文件中，由于文件带BOM头，就算删除<code>#coding:utf-8</code>编码头，脚本仍然<strong>可以正常运行</strong>。因为根据官方文档PEP 263中所述，python解释器能够识别BOM头，并按照UTF-8进行解释文件。</p>
+<p>在demo_without_BOM.py 文件中，由于文件不存在BOM头，当删除<code>#coding:utf-8</code>编码头后，脚本<strong>不能正常运行</strong>。因为脚本不存在BOM头，并且脚本代码中也没有<code>coding头</code>，所以python解释器无法识别编码方式，按照默认的ASCII方式解释脚本，当然会产生错误。</p>
+<h3 id="sys-setdefaultencoding-函数"><a class="header-anchor" href="#sys-setdefaultencoding-函数">¶</a>sys.setdefaultencoding()函数</h3>
+<hr>
+<p><strong>sys.getdefaultencoding() 与  sys.setdefaultencoding()</strong></p>
+<p><code>sys.setdefaultencoding()</code> 用于设定自动转换字符串的编解码方式。默认的编解码方式是ASCII。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> sys</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>reload(sys)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">print</span> sys.getdefaultencoding()  <span class="comment">#打印系统的默认编码方式</span></span><br><span class="line">ascii</span><br></pre></td></tr></table></figure>
+<p>字符串转换的方式是进行编解码，那么有两种：<strong>显式</strong>与<strong>隐式</strong>。</p>
+<ul>
+<li>(1) 显式的进行编解码</li>
+</ul>
+<p>windows命令行中，默认是采用gbk编码方式。那么如何转换成utf-8编码方式？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;s = <span class="string">'国家'</span></span><br><span class="line">&gt;&gt;&gt;s </span><br><span class="line"><span class="string">'\xb9\xfa\xbc\xd2'</span>   		 		<span class="comment">#gbk编码下的16进制表达</span></span><br><span class="line">&gt;&gt;&gt;s.decode(<span class="string">'gbk'</span>).encode(<span class="string">'utf-8)	#使用方式：先解码再编码</span></span><br><span class="line"><span class="string">'</span>\xe5\x9b\xbd\xe5\xae\xb6<span class="string">'   		#utf-8编码下的16进制表达</span></span><br></pre></td></tr></table></figure>
+<p>可以看出，在转换时，我们<strong>需要将str类型的字符串先解码再编码</strong>。<code>s.decode('gbk').encode('utf-8)</code></p>
+<ul>
+<li>(2) 隐式的进行编解码</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>s = <span class="string">'国家'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>sys.setdefaultencoding(<span class="string">'gbk'</span>)	<span class="comment">#设置默认的编码方式</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>s.encode(<span class="string">'utf-8'</span>)				<span class="comment">#使用方式：直接使用encode()函数编码。因为已经设置默认编								  	#码，python自动按照默认编码方式('gbk')已经解码为unicode									  #类型字符串</span></span><br><span class="line"><span class="string">'\xe5\x9b\xbd\xe5\xae\xb6'</span></span><br></pre></td></tr></table></figure>
+<p>而在隐式的编解码，我们就需要<code>sys.setdefaultencoding()</code>来设置默认的编码方式。转化时，只需要通过<code>encode()</code>函数来实现目标编码的字符串。因为，python解释器自动的对字符串按照编解码方式进行<code>decode()</code>，转换成unicode类型的字符串。</p>
+<p><strong>总结</strong>：</p>
+<blockquote>
+<p>coding 头： 是python解释器如何对二进制脚本文件读取方式的定义，默认采用ASCII解释脚本文件。coding头是针对python解释器读取文件的设置。</p>
+<p>sys.setdefaultencoding()：设置字符串默认编解码的方式，默认采用ASCII。可以根据需要设置为特定的编码方式。该函数是python解释器针对字符串编码的设置。</p>
+</blockquote>
+<p>这篇文章介绍了很多很杂的东西。总结一下，主要是几个知识点：</p>
+<ol>
+<li>python2中unicode与str的相关介绍</li>
+<li>python脚本文件的coding头介绍</li>
+<li>windows下的编码方式以及python解释器的特殊处理</li>
+<li>python coding头和sys.setdefaultencoding() 差别</li>
+</ol>
+<hr>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://blog.csdn.net/qq646748739/article/details/78347947" target="_blank" rel="noopener">https://blog.csdn.net/qq646748739/article/details/78347947</a></li>
+</ul>
+<p>​        #!/usr/bin/python和#!/usr/bin/env的区别</p>
+<ul>
+<li>
+<p><a href="https://www.crifan.com/python_head_meaning_for_usr_bin_python_coding_utf-8/" target="_blank" rel="noopener">https://www.crifan.com/python_head_meaning_for_usr_bin_python_coding_utf-8/</a></p>
+<p>关于Python脚本开头两行的：#!/usr/bin/python和# -<em>- coding: utf-8 -</em>-的作用 – 指定文件编码类型</p>
+</li>
+<li>
+<p><a href="http://python.jobbole.com/81244/" target="_blank" rel="noopener">http://python.jobbole.com/81244/</a></p>
+<p>Python中的str与unicode处理方法</p>
+</li>
+<li>
+<p><a href="https://www.python.org/dev/peps/pep-0263/" target="_blank" rel="noopener">https://www.python.org/dev/peps/pep-0263/</a></p>
+<p>定义python源文件编码</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+          
+            <a href="/tags/unicode/" rel="tag"><i class="fa fa-tag"></i> unicode</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/20/urllib用法/" rel="next" title="Python2的urllib、urllib2 与 Python3的urllib">
+                <i class="fa fa-chevron-left"></i> Python2的urllib、urllib2 与 Python3的urllib
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/uploads/avatar.jpg" alt="conversekuang">
+            
+              <p class="site-author-name" itemprop="name">conversekuang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/conversekuang" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:conversekuang@163.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础知识"><span class="nav-number">1.</span> <span class="nav-text">¶基础知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#coding-头"><span class="nav-number">2.</span> <span class="nav-text">¶coding 头</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本的执行"><span class="nav-number">2.1.</span> <span class="nav-text">¶脚本的执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脚本的编码"><span class="nav-number">2.2.</span> <span class="nav-text">¶脚本的编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sys-setdefaultencoding-函数"><span class="nav-number">2.3.</span> <span class="nav-text">¶sys.setdefaultencoding()函数</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-snowflake-o"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">conversekuang</span>
+
+  
+</div>
+
+<span id="busuanzi_container_site_uv">
+  访客数:<span id="busuanzi_value_site_uv"></span>人次
+</span>
+
+
+  <!--div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>-->
+
+
+
+  <!--span class="post-meta-divider">|</span>-->
+
+
+
+  <!--div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>-->
+
+
+
+
+
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>-->
+
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+
+
+
+<span id="busuanzi_container_site_pv">
+   总访问量:<span id="busuanzi_value_site_pv"></span>次
+</span>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共8k字</span>
+</div>
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
