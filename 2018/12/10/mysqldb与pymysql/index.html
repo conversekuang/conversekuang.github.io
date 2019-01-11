@@ -91,7 +91,7 @@
 <meta property="og:image" content="https://i.loli.net/2018/12/12/5c11006e33997.png">
 <meta property="og:image" content="https://i.loli.net/2018/12/12/5c11006eb1634.png">
 <meta property="og:image" content="https://i.loli.net/2018/12/12/5c11006ec083b.png">
-<meta property="og:updated_time" content="2019-01-06T16:04:07.851Z">
+<meta property="og:updated_time" content="2019-01-11T11:44:15.867Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysqldb与pymysql">
 <meta name="twitter:description" content="之前一直用的python2.7版本，用到的是MySQLdb这个模块。然而又经常在资料中有看到连接mysql使用的是pymysql模块，于是就好奇这两个到底有什么不同？于是，对这两个模块进行比较，看看究竟有什么区别。最后发现，其实差别不大，使用方法上几乎相同。">
@@ -427,7 +427,7 @@
 <blockquote>
 <p><code>_mysql</code> 模块</p>
 </blockquote>
-<p>如果要编写可跨数据库移植的应用，使用 <a href="http://mysql-python.sourceforge.net/MySQLdb.html#mysqldb" target="_blank" rel="noopener">MySQLdb</a>模块而避免直接使用<code>_mysql</code>模块。<code>_mysql</code> 是一个基本上实现MySQL C API的接口，更多内容参见 <a href="http://dev.mysql.com/doc/" target="_blank" rel="noopener">MySQL documentation</a>。因为我们使用MySQLdb模块基本上使用的是高级别的函数。</p>
+<p>如果要编写可跨数据库移植的应用，使用 <a href="http://mysql-python.sourceforge.net/MySQLdb.html#mysqldb" target="_blank" rel="noopener">MySQLdb</a>模块而避免直接使用<code>_mysql</code>模块，因为我们使用MySQLdb模块基本上使用的是高级别的函数。<code>_mysql</code> 是基于实现MySQL C API的接口，更多内容参见 <a href="http://dev.mysql.com/doc/" target="_blank" rel="noopener">MySQL documentation</a>。</p>
 <p>所以第3点可以概括为，MySQLdb实现了 Python 数据库 API 规范 V2.0，基于 MySQL C API 上建立的。</p>
 <h3 id="pymysql"><a class="header-anchor" href="#pymysql">¶</a>PyMySQL</h3>
 <ol>
@@ -452,9 +452,8 @@
 </li>
 </ol>
 <p>因此，pymysql基本可以代替MySQLdb，解决因为python版本带来的问题。</p>
-<hr>
 <h2 id="含有格式化操作符的sql语句的执行"><a class="header-anchor" href="#含有格式化操作符的sql语句的执行">¶</a>含有格式化操作符的sql语句的执行</h2>
-<p>由于含有格式化操作符的sql语句经常经常出现各种写法，因此这里做一个总结。下面我们先建立链接，进而创建一个table。</p>
+<p>由于含有格式化操作符的sql语句经常出现各种写法，因此这里做一个总结。下面我们先建立链接，进而创建一个table。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> MySQLdb</span><br><span class="line">conn = MySQLdb.connect(host=<span class="string">'localhost'</span>,</span><br><span class="line">                       user = <span class="string">'root'</span>, </span><br><span class="line">                       passwd =<span class="string">''</span>, </span><br><span class="line">                       db = <span class="string">'user_information'</span>,</span><br><span class="line">                       charset=<span class="string">'utf8'</span>)</span><br><span class="line"><span class="comment">#在MySQLdb密码的参数名是passwd,这个注意一下。当然我们平时也可以不写参数名称，按照默认的参数顺序传递实参即可。</span></span><br><span class="line"><span class="comment">#实参均是字符串形式</span></span><br><span class="line">cursor = conn.cursor()</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line">connection = pymysql.connect(host=<span class="string">'localhost'</span>,</span><br><span class="line">                             user=<span class="string">'root'</span>,</span><br><span class="line">                             password=<span class="string">''</span>,</span><br><span class="line">                             db=<span class="string">'db'</span>,</span><br><span class="line">                             charset=<span class="string">'utf8'</span>)</span><br><span class="line">cursor = conn.cursor()</span><br></pre></td></tr></table></figure>
 <p>这里我们写出两个模块的connect()操作，可以发现，MySQLdb密码的参数名是passwd。这个自己写的时候容易出错。稍微提一下哈。</p>
@@ -463,12 +462,13 @@
 <p>以上都是铺垫，下面才正式进入sql语句的执行部分。</p>
 <p>如果我们经常Ctrl C + V的话，基本很难发现这个小细节。因为这跟字符串匹配有点类似。如果不参照各种模板，基本上按照字符串匹配符和参数的写法写的。我自己写出来的sql语句就是这样的：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sql = <span class="string">"INSERT INTO client(name,age,phone)\</span></span><br><span class="line"><span class="string">       VALUES(%s,%d,%s)"</span> % (<span class="string">'converse'</span>, <span class="number">27</span> ,<span class="string">'12345654321'</span>)</span><br><span class="line">cursor.execute(sql)</span><br></pre></td></tr></table></figure>
-<p>。。很显然，这就心塞的报错了。（不就是一个插入语句么，怎么就会错？不知道是mysql版本还是其他问题？）</p>
+<p>。。很显然，这就心塞的报错了。（不就是一个插入语句么，怎么就会错？目前问题出现的原因不详。）</p>
 <p>使用mysqldb模块：</p>
 <p><img src="https://i.loli.net/2018/12/12/5c11006d9891d.png" alt="mysqldb拼接URL.png"></p>
 <p>使用pymysql模块：</p>
 <p><img src="https://i.loli.net/2018/12/12/5c11006e33997.png" alt="pymysql拼接URL.png"></p>
-<p>其实百度一下也很容易解决，在用 ’ '将字符串格式化操作符包裹起来就正确了。那么含有<em>字符串格式化</em>操作符的sql语句的格式该如何进行书写？下面进行总结。（不论使用哪个模块，均可采用以下两种方式执行含有字符串格式化操作符的sql语句，因此是通用的不区分模块进行书写）</p>
+<p>就说一下该情况出现的解决方式吧。</p>
+<p>​	其实百度一下也很容易解决，用 ’ ’ 将字符串格式化操作符包裹起来就正确了。那么含有<em>字符串格式化</em>操作符的sql语句的格式该如何进行书写？下面进行总结。（不论使用哪个模块，均可采用以下两种方式执行含有字符串格式化操作符的sql语句，因此是通用的不区分模块进行书写）</p>
 <p>执行含有字符串格式化操作符的sql语句有以下两种方式：</p>
 <h3 id="sql语句的拼接方式"><a class="header-anchor" href="#sql语句的拼接方式">¶</a>sql语句的拼接方式</h3>
 <ul>
