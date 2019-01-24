@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="nginx,代理服务器">
+  <meta name="keywords" content="nginx,代理服务器,负载均衡">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="最近在准备项目需要的一些知识，后续项目可能会用到nginx用作负载均衡。今天主要学习了一下nginx的及一些基本知识与应用，后续还会针对负载均衡进行学习。">
-<meta name="keywords" content="nginx,代理服务器">
+<meta name="description" content="之前对nginx 的基础知识进行介绍，下面主要针对nginx在负载均衡方面的学习。">
+<meta name="keywords" content="nginx,代理服务器,负载均衡">
 <meta property="og:type" content="article">
-<meta property="og:title" content="nginx  for  windows">
-<meta property="og:url" content="http://yoursite.com/2019/01/23/nginx/index.html">
+<meta property="og:title" content="nginx负载均衡">
+<meta property="og:url" content="http://yoursite.com/2019/01/24/nginx-load-balance/index.html">
 <meta property="og:site_name" content="A Little Faith">
-<meta property="og:description" content="最近在准备项目需要的一些知识，后续项目可能会用到nginx用作负载均衡。今天主要学习了一下nginx的及一些基本知识与应用，后续还会针对负载均衡进行学习。">
+<meta property="og:description" content="之前对nginx 的基础知识进行介绍，下面主要针对nginx在负载均衡方面的学习。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-01-24T12:31:54.202Z">
+<meta property="og:updated_time" content="2019-01-24T12:36:47.287Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="nginx  for  windows">
-<meta name="twitter:description" content="最近在准备项目需要的一些知识，后续项目可能会用到nginx用作负载均衡。今天主要学习了一下nginx的及一些基本知识与应用，后续还会针对负载均衡进行学习。">
+<meta name="twitter:title" content="nginx负载均衡">
+<meta name="twitter:description" content="之前对nginx 的基础知识进行介绍，下面主要针对nginx在负载均衡方面的学习。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/01/23/nginx/">
+  <link rel="canonical" href="http://yoursite.com/2019/01/24/nginx-load-balance/">
 
 
 
 
 
-  <title>nginx  for  windows | A Little Faith</title>
+  <title>nginx负载均衡 | A Little Faith</title>
   
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/23/nginx/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/24/nginx-load-balance/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="conversekuang">
@@ -280,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">nginx  for  windows</h1>
+          <h1 class="post-title" itemprop="name headline">nginx负载均衡</h1>
         
 
         <div class="post-meta">
@@ -292,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-23T23:18:23+08:00">
-                2019-01-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-24T20:36:00+08:00">
+                2019-01-24
               </time>
             
 
@@ -332,7 +332,7 @@
 
           
           
-             <span id="/2019/01/23/nginx/" class="leancloud_visitors" data-flag-title="nginx  for  windows">
+             <span id="/2019/01/24/nginx-load-balance/" class="leancloud_visitors" data-flag-title="nginx负载均衡">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -358,7 +358,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2.1k 字
+                  2.2k 字
                 </span>
               
 
@@ -374,7 +374,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  8 分钟
+                  7 分钟
                 </span>
               
             </div>
@@ -395,167 +395,136 @@
       
 
       
-        <p>最近在准备项目需要的一些知识，后续项目可能会用到nginx用作负载均衡。今天主要学习了一下nginx的及一些基本知识与应用，后续还会针对负载均衡进行学习。</p>
+        <p>之前对nginx 的基础知识进行介绍，下面主要针对nginx在负载均衡方面的学习。</p>
 <a id="more"></a>
-<h1>nginx  for  windows</h1>
-<h3 id="nginx-相关知识"><a class="header-anchor" href="#nginx-相关知识">¶</a>nginx 相关知识</h3>
+<h2 id="nginx-负载均衡"><a class="header-anchor" href="#nginx-负载均衡">¶</a>nginx 负载均衡</h2>
 <blockquote>
-<p>nginx是什么？</p>
+<p>nginx 负载均衡</p>
 </blockquote>
-<p>nginx （发音[engine x]） 是HTTP与反向代理服务器，邮件代理服务器，TCP/UDP代理服务器。</p>
-<p><a href="https://www.cnblogs.com/leonxyzh/p/7497869.html" target="_blank" rel="noopener">Dropbox</a> ：用于代理层，处理延时敏感的数据交互以及高吞吐量的数据传输。</p>
-<p><a href="https://openconnect.netflix.com/en/software/" target="_blank" rel="noopener">Netflix</a> ：nginx被选做web 服务器，用于提高扩展性和提升性能。</p>
-<p><a href="https://www.nginx.com/case-studies/nginx-wordpress-com/" target="_blank" rel="noopener">Wordpress.com</a> ：主要采用nginx用于负载均衡。</p>
-<p><a href="http://blog.fastmail.fm/2007/01/04/webimappop-frontend-proxies-changed-to-nginx/" target="_blank" rel="noopener">FastMail.FM</a>  ：采用了nginx作为邮件代理服务器。</p>
-<blockquote>
-<p>nginx组成</p>
-</blockquote>
-<p>nginx由1个master node 和多个worker node组成。</p>
-<p>master node: 读取、检验配置信息，维护worker node进程。</p>
-<p>worker node: 处理实际的请求。</p>
-<p>nginx采用<strong>事件驱动模型</strong> 与<strong>独立于操作系统的机制</strong>将请求高效的分配到worker node上进行处理。worker node的数目可以在conf配置文件中进行设置，一般worker node节点的数量不超过CPU核心数量。</p>
-<h3 id="nginx-windows介绍"><a class="header-anchor" href="#nginx-windows介绍">¶</a>nginx windows介绍</h3>
-<p>nginx的windows版本在功能上与Unix版本没有太大差异，除了以下功能：XSLT过滤, 图片过滤, GeoIP模块, 与 内嵌 Perl语言。但是，windows版本的nginx在性能上与unix版本相差甚远。因此，windows版本被视为是测试版本。造成性能差异的原因(known issues)有以下几个：</p>
+<p>跨多个应用程序实例的负载平衡是一种常用的技术，用于优化资源利用率，最大化吞吐量，减少延迟与确保容错配置。可以使用nginx作为非常有效的HTTP负载均衡器，将流量分配到多个应用程序服务器，并使用nginx提高Web应用程序的性能，可伸缩性和可靠性。</p>
+<p>​     在介绍负载均衡之前，先介绍一下，代理与反向代理的一些个人理解。</p>
 <ul>
 <li>
-<p>nginx 的Windows版本使用的是本地的Win32 API，只有<code>select()</code>连接方法目前可以使用</p>
-</li>
-<li>
-<p>尽管可以开启多个worker nodes，但实际只有一个进行工作</p>
-</li>
-<li>
-<p>worker node 能够同时处理的连接数不能超过1024</p>
-</li>
-<li>
-<p>不支持UDP代理功能</p>
+<p>正向代理：用户并非直接访问目标服务器，而是先通过代理服务器。首先，用户将请求发送到代理服务器，再由代理服务器将请求发送到目标服务器来获取服务。最终，再由代理服务器将资源返回用户端。</p>
+<p>例如，在国内我们上不了google，但可以通过在国外搭建代理服务器，然后将请求发送到代理服务器，进而由代理帮我们访问google，再将资源返回到用户端。这样就避免了无法直接访问google的情况。然而，在访问google的时候，google服务器“看”到的是代理而不是真正的用户端。（我们这里假设理想情况下代理服务器看不到用户端信息。现实中，是可以在头文件中将代理的路由信息进行记录）</p>
 </li>
 </ul>
-<hr>
+<p><strong>特点：目标服务器并不知道真实的请求用户是谁</strong></p>
+<ul>
+<li>反向代理：用户将请求发送到反向代理服务器端，但该反向代理服务器端并不负责处理请求，而是将请求分配到其他的服务器进行执行。在该过程中，用户并不知道具体处理该请求的服务器是哪台。用户可见的只是反向代理服务器。</li>
+</ul>
+<p>​       例如，我们拨打10086时能够获取相关服务，但是我们并不知道也不关心这个服务具体是在哪个服务器上执行的，用户只需要知道通过10086就可以获取服务就OK了；同样，当双11的时候，那么多人都在访问www.taobao.com时，显然这么多请求不能再一台服务器上，虽然我们都可以正常访问（嗯。。。理想前提下哈。）但是具体在哪台服务器上处理的请求我们并不知道。</p>
+<p><strong>特点：用户端并不知道真实的处理请求的服务器是哪个</strong></p>
+<ul>
+<li>负载均衡：前面说到反向代理，其实负载均衡算是反向代理最典型的应用。反向代理体现的思想更多的是将用户请求分配到实际处理的服务器上，并且实际处理请求的服务器对于用户端不可见。而负载均衡是在反向代理的基础上，更侧重于考虑如何将用户请求合理的进行分配。因此，需要提到负载均衡的算法。</li>
+</ul>
 <blockquote>
-<p>安装运行nginx</p>
+<p>负载均衡算法</p>
 </blockquote>
-<p>在官网进行下载压缩包 <a href="http://nginx.org/en/docs/windows.html" target="_blank" rel="noopener">http://nginx.org/en/docs/windows.html</a></p>
-<p>解压后，通过命令行在压缩包路径下使用命令</p>
+<p>nginx支持以下负载平衡方法：</p>
 <ul>
 <li>
-<p><strong>启动nginx</strong>：<code>start nginx</code></p>
+<p>轮询法 - 对应用程序服务器的请求以循环方式分发，</p>
 </li>
 <li>
-<p>查看nginx 进程：<code>tasklist /fi &quot;imagename eq nginx.exe&quot;</code></p>
-<p>会得到如下结果：</p>
+<p>最少连接 - 下一个请求分配给活动连接数最少的服务器</p>
+</li>
+<li>
+<p>IP-hash  - 哈希函数用于确定应为下一个请求选择哪个服务器（基于客户端的IP地址）。</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">映像名称      PID    会话名  会话#   内存使用</span><br><span class="line">==========  ====  ======== ==== =========</span><br><span class="line">nginx.exe   1332  Console   1    5,608 K</span><br><span class="line">nginx.exe   6024  Console   1    6,044 K</span><br></pre></td></tr></table></figure>
-<p>可以看到结果显示有两个进程，这是因为nginx默认的配置是1个worker node，再加上mater node，因此共有2个进程。</p>
-<p>再访问http://localhost:80 可以显示 nginx 访问成功的页面。</p>
-<p>那么简单的nginx配置以及运用成功。</p>
+<ol>
+<li><strong>轮询法（默认方法）</strong></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    upstream myapp1 &#123;</span><br><span class="line">        server srv1.example.com;</span><br><span class="line">        server srv2.example.com;</span><br><span class="line">        server srv3.example.com;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        listen 80;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">            proxy_pass http://myapp1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的示例中，在srv1-srv3上运行了3个相同应用程序的实例。 如果未特别配置负载平衡方法，则默认为轮询法进行分配请求。 所有请求都代理到服务器组myapp1，nginx应用HTTP负载平衡来分发请求。</p>
+<ol start="2">
+<li><strong>最小连接数法</strong></li>
+</ol>
+<p>在某些请求需要更长时间才能完成的情况下，最小连接允许更公平地控制应用程序实例上的负载。</p>
+<p>使用最少连接的负载平衡，nginx将尝试不会使繁忙的应用程序服务器超载请求过多，而是将新请求分发给不太繁忙的服务器。当<strong>least_conn指令</strong>用作服务器组配置的一部分时，将激活nginx中的最小连接负载平衡：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">upstream myapp1 &#123;</span><br><span class="line">    least_conn;</span><br><span class="line">    server srv1.example.com;</span><br><span class="line">    server srv2.example.com;</span><br><span class="line">    server srv3.example.com;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
-<p>nginx 命令</p>
+<p>请注意，通过轮询法或最少连接数法的负载平衡，每个后续客户端的请求可能会分发到不同的服务器。 **无法保证同一客户端始终指向同一服务器。**则会出现的问题是，用户的登录、访问记录等session都将无法记录。</p>
 </blockquote>
+<ol start="3">
+<li><strong>IP hash法（可以解决session持久化）</strong></li>
+</ol>
+<p>如果需要将客户端绑定到特定的应用程序服务器 - 换句话说，就始终尝试选择特定服务器而言，使客户端的session“粘滞”或“持久” -  ip-hash负载平衡机制可以是用过的。</p>
+<p>使用ip-hash，客户端的IP地址将用作散列密钥，以确定应为客户端的请求选择服务器组中的哪个服务器。 此方法可确保来自同一客户端的请求始终定向到同一服务器，但此服务器不可用时除外。要配置ip-hash负载平衡，只需将<strong>ip_hash指令</strong>添加到服务器（上游）组配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">upstream myapp1 &#123;</span><br><span class="line">    ip_hash;</span><br><span class="line">    server srv1.example.com;</span><br><span class="line">    server srv2.example.com;</span><br><span class="line">    server srv3.example.com;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此外，需要注意的是：<strong>IP_hash法仅支持HTTP协议。</strong></p>
+<ul>
+<li><strong>权重法</strong></li>
+</ul>
+<p>个人感觉权重法这里不算做一种负载均衡策略，只是在各种负载均衡策略中调整负载比例的一种方式。</p>
+<p>在上面的示例中，均未配置服务器权重，这意味着所有指定的服务器都被视为对特定负载平衡方法具有同等资格。特别是在轮询法中，它还意味着在服务器上或多或少地平等分配请求 - 只要有足够的请求，并且以统一的方式处理请求并且足够快地完成。通过设置服务器权重可以影响nginx负载平衡算法。当为服务器指定权重参数时，权重被计入负载平衡决策的一部分。  如下配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">upstream myapp1 &#123;</span><br><span class="line">    server srv1.example.com weight=3;</span><br><span class="line">    server srv2.example.com;</span><br><span class="line">    server srv3.example.com;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当使用此配置时，每5个新请求将分布在应用程序实例中，如下所示：3个请求将定向到srv1，1个请求将转到srv2，另一个请求转到srv3。由此可见，在轮询法中能够应用权重法，能够改变服务器之间的分配比例。在最新版本的nginx中，同样可以使用<strong>权重</strong>到最少连接数法与ip-hash法的负载平衡。</p>
+<blockquote>
+<p>health checks</p>
+</blockquote>
+<p>nginx中的反向代理实现服务器运行状况检查。 如果来自特定服务器的响应失败并显示错误，则nginx会将此服务器标记为失败，并在一段时间内将避免为后续入站的请求分配到此服务器。</p>
+<p><strong>max_fails指令</strong>：在fail_timeout期间，发生与服务器通信的连续不成功尝试次数。 默认情况下，max_fails设置为1.当它设置为0时，将禁用此服务器的运行状况检查。</p>
+<p><strong>fail_timeout指令</strong>：从服务器开始发生失败算起的一段时间内。在服务器发生故障后的fail_timeout间隔后，nginx将开始使用实时客户端的请求正常探测服务器。 如果探测成功，则将服务器标记为实时。</p>
+<blockquote>
+<p>负载均衡能够应用的协议</p>
+</blockquote>
+<p>nginx中的反向代理实现包括：HTTP，HTTPS，FastCGI，uwsgi，SCGI，memcached和gRPC的负载平衡</p>
 <table>
 <thead>
 <tr>
-<th>命令</th>
-<th>内容</th>
+<th>协议</th>
+<th>实现负载均衡的指令</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>nginx -s stop</td>
-<td>快速关闭（强制关闭，可能存在未处理完的任务）</td>
+<td>HTTP</td>
+<td>HTTP</td>
 </tr>
 <tr>
-<td>nginx -s quit</td>
-<td>优雅的关闭（当任务都处理完再进行关闭）</td>
+<td>HTTPS</td>
+<td>HTTPS</td>
 </tr>
 <tr>
-<td>nginx -s reload</td>
-<td>改变配置的时候，以新的配置创建worker node，当老的worker node完成任务后关闭</td>
+<td>FastCGI</td>
+<td><a href="http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html#fastcgi_pass" target="_blank" rel="noopener">fastcgi_pass</a></td>
 </tr>
 <tr>
-<td>nginx -s reopen</td>
-<td>重新打开log</td>
+<td>uwsgi</td>
+<td><a href="http://nginx.org/en/docs/http/ngx_http_uwsgi_module.html#uwsgi_pass" target="_blank" rel="noopener">uwsgi_pass</a></td>
+</tr>
+<tr>
+<td>memcached</td>
+<td><a href="http://nginx.org/en/docs/http/ngx_http_memcached_module.html#memcached_pass" target="_blank" rel="noopener">memcached_pass</a></td>
+</tr>
+<tr>
+<td>gRPC</td>
+<td><a href="http://nginx.org/en/docs/http/ngx_http_grpc_module.html#grpc_pass" target="_blank" rel="noopener">grpc_pass</a></td>
+</tr>
+<tr>
+<td>SCGI</td>
+<td><a href="http://nginx.org/en/docs/http/ngx_http_scgi_module.html#scgi_pass" target="_blank" rel="noopener">scgi_pass</a></td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>reload 命令</p>
+<p>Nginx OSS (Open Source Software) 与Nginx  Plus</p>
 </blockquote>
-<p>打开nginx目录下的conf/nginx.conf文件，可以对nginx进行配置。当修改配置文件后，新的配置信息不会立即被使用。nginx需要通过reload 命令<code>nginx -s reload</code>加载更新的配置文件或者重启nginx，新的配置信息才会生效。</p>
-<p>当执行<code>nginx -s reload</code>命令后，master node会接收到reload重加载的信号，首先检查新配置信息语法的合法性。</p>
-<ul>
-<li>在配置信息的存在问题，master node将撤回更改并继续按照原来的配置信息工作。</li>
-<li>在配置信息的无误情况下，master node会产生新的 worker node并发送信息到old worker node，让他们关闭。old worker node在接收到关闭的命令后，将停止接收新请求，并将当前进程中还没处理完的请求处理完后，old worker node进程才会退出。</li>
-</ul>
-<h3 id="配置nginx-conf文件"><a class="header-anchor" href="#配置nginx-conf文件">¶</a>配置nginx.conf文件</h3>
-<blockquote>
-<p>配置文件结构</p>
-</blockquote>
-<p>nginx包括很多的模块，由配置文件的指令进行控制。</p>
-<p>指令包括：简单指令和块指令。注释采用#进行注释</p>
+<p>nginx有开源版和商业版两种。</p>
+<p>在充当web server与反向代理的角色中，两个版本没有太大的区别。但是在负载均衡与高可用方面，商业版做了提升。例如：在负载均衡算法中，least_time策略只在plus版本中才有。</p>
+<p>商业版突出的服务有以下两点：</p>
 <ul>
 <li>
-<p>简单指令包括：命令名称与参数，用空格分割开，结尾以&quot;;&quot;结束。</p>
+<p>帮助用户build与test代码，为用户提供支持服务。</p>
 </li>
 <li>
-<p>块指令：与简单指令的结构一样，只是由花括号{ }包裹起来。</p>
-<p>块指令中在花括号中包含其他的指令。这些叫做“context”（例如，http,server等）。</p>
+<p>功能实现都提供具体demo，帮助用户构建自己的应用。</p>
 </li>
-</ul>
-<p>部分指令在虽然配置文件中但是不在任何contexts中，那么这些指令被视为在 main context中。</p>
-<p>如下是nginx.conf文件的一部分：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#user  nobody;</span><br><span class="line">worker_processes  2;               #简单指令</span><br><span class="line"></span><br><span class="line">events &#123;                           #块指令</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http&#123;</span><br><span class="line">    server&#123;</span><br><span class="line">        location&#123;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>worker_processes，events，http均位于 main context；</p>
-<p>server在http context中，location在server context中。</p>
-<blockquote>
-<p>提供静态资源</p>
-</blockquote>
-<p>web服务器一个最重要的工作就是提供服务文件（例如，静态HTML网页或者图片）。下面就进行一个demo，根据不同的请求nginx将从不同的路径下获取资源。</p>
-<ul>
-<li>
-<p>在nginx.conf文件中已经写好一些server的设置，在试验的时候建议都把他们注释掉。</p>
-</li>
-<li>
-<p>在http{ } 块内创建一个新的server块，如下所示：</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    location / &#123;</span><br><span class="line">        root data/www;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    location /images/ &#123;</span><br><span class="line">        root data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>尤其注意：<font color="red">root 后面的格式写法</font>。默认是相对路径的写法，也可以使用绝对路径。</strong></p>
-<p>以上我们已经配置好路径信息，再将资源放到路径下。</p>
-<p>D:\nginx-1.15.8\data\www\some 路径中创建一个 example.html</p>
-<p>D:\nginx-1.15.8\data\images 路径中创建一个 example.png</p>
-<p>最后，我们需要使用start或者reload命令来更新配置信息。</p>
-<ul>
-<li>URL请求与nginx查找资源返回</li>
-</ul>
-<p>一般来说，配置文件会包括一些已经配置好的server块，它们可以通过<strong>服务器名称</strong>和<strong>端口</strong>进行区分（在上面的配置中，我们并没有指明端口，因为默认是使用80端口的）。当一个URI请求到达时，nginx会根据URI来判断到底由哪个server来处理请求，并根据URI中的参数与server块中的location 指定前缀 进行比对。当URI中的参数与多个location路径相匹配，nginx将选择location前缀<strong>匹配最长</strong>的那个location路径来执行，其他的location路径则会匹配失败。</p>
-<p>首先，我们采用如下URI请求资源：</p>
-<p>（1）<code>http://localhost/images/example.png</code></p>
-<p>URI中<code>/images/example.png</code>能够匹配location 前缀/ 与前缀 /images/，但是前缀/images/与URI的匹配长度最长，因此nginx将在 **data/**文件夹下寻找资源。最后根据URI的请求路径，nginx将本地的路径是<code>data/images/example.png</code>的资源返回。</p>
-<p>（2）<code>http://localhost/some/example.html</code></p>
-<p>该URI只与“前缀/”的location进行匹配，因此，根据配置信息，nginx将在 <strong>data/www</strong>文件夹下查找资源。再根据请求路径<code>some/example.html</code>，最终的本地资源路径为<code>data/www/some/example.html</code>。</p>
-<blockquote>
-<p>注意：</p>
-</blockquote>
-<p>URI的请求资源的在本地文件系统路径最终为：匹配location前缀获得的地址 + URI请求路径(URL中的path信息)。例如：data  + /images/example.png = data/images/example.png</p>
-<p>所以我们的<strong>资源一定要放对位置</strong>，否则nginx无法获取资源，就回返回404错误信息。</p>
-<blockquote>
-<p>简单的代理服务</p>
-</blockquote>
-<p>最常用的用途之一就是作为代理服务器。</p>
-<p>下面给出一个场景，当对图片的请求时，在代理服务器A处理，其他请求由代理服务器A分发到服务器B进行处理。</p>
-<p>我们在同一个nginx实例上模拟该场景。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">server &#123;                      #模拟服务器A</span><br><span class="line">    location / &#123;</span><br><span class="line">        proxy_pass http://localhost:8080;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	location ~ \.(gif|jpg|png)$ &#123;</span><br><span class="line">   		 root /data/images;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;                      #模拟服务器B</span><br><span class="line">    listen 8080;</span><br><span class="line">    root /data/up1;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当请求来首先进行前缀匹配，第二个location是对所有后缀为gif,jpg,png的文件进行匹配，这三种图片格式均按第二种映射到本地对应目录，因为匹配长度最长。因此服务器会筛选出图片，而其他的请求，均按第一种映射。在第一种location，通过proxy_pass指令，将实际处理请求的服务器信息给出：协议，域名，端口。这样就服务器A就变成了代理服务器。而 另一个server中，给出监听端口与映射路径，模拟实际处理请求的服务器。</p>
-<p><strong>总结：</strong></p>
-<ul>
-<li>nginx的介绍与组成</li>
-<li>nginx基本命令</li>
-<li>nginx的基本用途</li>
-<li>nginx配置方法</li>
 </ul>
 <hr>
-<p>官网新手指南  <a href="http://nginx.org/en/docs/beginners_guide.html" target="_blank" rel="noopener">http://nginx.org/en/docs/beginners_guide.html</a></p>
+<p>官方资料  —&gt;  <a href="http://nginx.org/en/docs/http/load_balancing.html" target="_blank" rel="noopener">http://nginx.org/en/docs/http/load_balancing.html</a></p>
 
       
     </div>
@@ -575,7 +544,7 @@
           
             <a href="/tags/nginx/" rel="tag"><i class="fa fa-tag"></i> nginx</a>
           
-            <a href="/tags/proxy-server/" rel="tag"><i class="fa fa-tag"></i> proxy server</a>
+            <a href="/tags/load-balance/" rel="tag"><i class="fa fa-tag"></i> load balance</a>
           
         </div>
       
@@ -588,8 +557,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/01/06/Python coding头的作用/" rel="next" title="Python coding头的作用">
-                <i class="fa fa-chevron-left"></i> Python coding头的作用
+              <a href="/2019/01/23/nginx/" rel="next" title="nginx  for  windows">
+                <i class="fa fa-chevron-left"></i> nginx  for  windows
               </a>
             
           </div>
@@ -597,10 +566,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/24/nginx-load-balance/" rel="prev" title="nginx负载均衡">
-                nginx负载均衡 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -750,7 +715,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">nginx  for  windows</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-相关知识"><span class="nav-number">1.0.1.</span> <span class="nav-text">¶nginx 相关知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx-windows介绍"><span class="nav-number">1.0.2.</span> <span class="nav-text">¶nginx windows介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置nginx-conf文件"><span class="nav-number">1.0.3.</span> <span class="nav-text">¶配置nginx.conf文件</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx-负载均衡"><span class="nav-number">1.</span> <span class="nav-text">¶nginx 负载均衡</span></a></li></ol></div>
             
 
           </div>
